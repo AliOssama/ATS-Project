@@ -1,6 +1,10 @@
 import requests
 from datetime import datetime
 
+import os
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+
 # Companies using Greenhouse or Lever
 GREENHOUSE_COMPANIES = ["airbnb", "stripe", "hubspot"]
 LEVER_COMPANIES = ["netflix", "palantir", "roblox"]
@@ -30,3 +34,21 @@ if __name__ == "__main__":
     results = check_jobs()
     for job in results:
         print(job)
+
+
+def send_email(job_list):
+    if not job_list:
+        return
+
+    message = Mail(
+        from_email='aly.ossama.aly@gmail.com',
+        to_emails='aly.ossama.aly@gmail.com',
+        subject='Daily Job Feed: New Opportunities',
+        html_content=f"<p>Here are the jobs found in the last 24h:</p><ul>{''.join([f'<li>{j}</li>' for j in job_list])}</ul>"
+    )
+    try:
+        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+        sg.send(message)
+        print("Email sent successfully!")
+    except Exception as e:
+        print(f"Error: {e}")
