@@ -1,17 +1,3 @@
-name: Daily Job Scan
-on:
-  schedule:
-    - cron: '0 11 * * *' # 7 AM EST is 11 AM UTC
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Run Job Scraper
-        run: python scraper.py
-
-
-
 name: Daily Scrape
 on:
   schedule:
